@@ -1,10 +1,9 @@
 import argparse
+import colorama
 import datetime
 import dateutil
-import dateutil
-import pdb
 import os
-import colorama
+import re
 from trello import TrelloClient
 from exceptions import JerseyError
 
@@ -51,6 +50,16 @@ def format_due_date(card):
             due_output = due_datetime.strftime(f'%Y-%m-%d {hour}:{minute} %P')
         due_output = f'{colorama.Fore.CYAN}{due_output}'
     return due_output
+
+def parse_new_due_date(due_date):
+    if not due_date:
+        return
+
+    today = datetime.datetime.today()
+
+    regex_match = re.search(r'(\d*)\s*days?', due_date)
+    if regex_match:
+        
 
 def arg_list(cli_args):
     """List a board card summary"""
@@ -121,7 +130,22 @@ def arg_move(cli_args):
 
 def arg_add(cli_args):
     """Add a new card to a given list"""
-    import pdb; pdb.set_trace()
+
+    try:
+        destination_list = [
+            _ for _ in backlog_board().list_lists()
+            if _.name == cli_args.list_name
+        ][0]
+    except IndexError:
+        print(f'{colorama.Fore.RED}Error searching for list')
+        return
+
+    new_due = parse_new_due_date(cli_args.due)
+    
+    destination_list.add_card(
+        name=cli_args.card_name,
+        due=new_due if cli_args.due else "null"
+    )
 
 def main():
     parser = argparse.ArgumentParser()
