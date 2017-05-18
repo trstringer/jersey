@@ -66,14 +66,12 @@ def arg_list(cli_args):
         comments_output = f' {colorama.Fore.GREEN}({comments_count})' if comments_count > 0 else ''
         print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output}')
 
-def arg_show(cli_args):
-    """Show a card summary"""
-
-    board = backlog_board()
+def card_by_id(card_id_postfix, board):
+    """Retrieve a card by the last 3 digits of its id"""
 
     found_cards = [
         _ for _ in board.get_cards()
-        if _.id[-3:] == cli_args.card_id
+        if _.id[-3:] == card_id_postfix
     ]
 
     if len(found_cards) == 0:
@@ -82,7 +80,17 @@ def arg_show(cli_args):
         print(f'{colorama.Fore.RED}More than one card unexpectedly found{colorama.Fore.RESET}')
         return
 
-    card = found_cards[0]
+    return found_cards[0]
+
+def arg_show(cli_args):
+    """Show a card summary"""
+
+    board = backlog_board()
+
+    card = card_by_id(cli_args.card_id, board)
+
+    if not card:
+        return
 
     print(f'{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}{card.name}{colorama.Fore.RESET}')
     print(f'Due: {format_due_date(card)}{colorama.Fore.RESET}')
@@ -95,7 +103,25 @@ def arg_show(cli_args):
 
 def arg_move(cli_args):
     """Move a card to a new list"""
-    pass
+
+    board = backlog_board()
+
+    try:
+        destination_list = [_ for _ in board.list_lists() if _.name == cli_args.list_name][0]
+    except IndexError:
+        print(f'{colorama.Fore.RED}Destination list not found')
+        return
+
+    card = card_by_id(cli_args.card_id, board)
+    if not card:
+        print(f'{colorama.Fore.RED}Card not found')
+        return
+
+    card.change_list(destination_list.id)
+
+def arg_add(cli_args):
+    """Add a new card to a given list"""
+    import pdb; pdb.set_trace()
 
 def main():
     parser = argparse.ArgumentParser()
@@ -113,9 +139,21 @@ def main():
 
     # move a card
     move_parser = subparsers.add_parser('move', help='move a card to a different list')
-    move_parser.add_arguments('card_id', help='card to move')
-    move_parser.add_arguments('list_name', help='list to move card to')
+    move_parser.add_argument('card_id', help='card to move')
+    move_parser.add_argument('list_name', help='list to move card to')
     move_parser.set_defaults(func=arg_move)
+
+    # add a card
+    add_parser = subparsers.add_parser('add', help='add a new card')
+    add_parser.add_argument('card_name', help='card name and content')
+    add_parser.add_argument('list_name', help='the destination list to add the card to')
+    add_parser.add_argument('-d', '--due', help='(optional) due date for the card')
+    add_parser.add_argument(
+        '-l',
+        '--labels',
+        help='(optional) comma-separated list of labels for the new card'
+    )
+    add_parser.set_defaults(func=arg_add)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)
@@ -128,7 +166,7 @@ if __name__ == '__main__':
 # list particular list ::     $ nj list <list_name>
 # show info about card ::     $ nj show <card_id>
 # move card ::                $ nj move <card_id> <list_name>
-# add card ::                 $ nj add 'card name' -d <due_date> -l <labels>
+# add card ::                 $ nj add 'card name' <list_name> -d <due_date> -l <labels>
 #   - due_date can be 'today', 'tomorrow', '4 days', 'next wednesday', '5/31', '2017/5/31'
 #   - due_date is optional
 #   - labels is a comma-delimited list of existing labels
