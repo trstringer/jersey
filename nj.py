@@ -47,7 +47,7 @@ def format_due_date(card):
         elif due_datetime.date() == tomorrow.date():
             due_output = f'Tomorrow {hour}:{minute} {am_or_pm}'
         else:
-            due_output = due_datetime.strftime(f'%Y-%m-%d {hour}:{minute} %P')
+            due_output = due_datetime.strftime(f'%Y-%m-%d {hour}:{minute} {am_or_pm}')
         due_output = f'{colorama.Fore.CYAN}{due_output}'
     return due_output
 
@@ -169,6 +169,13 @@ def arg_move(cli_args):
 
     card.change_list(destination_list.id)
 
+def parse_labels(labels_raw):
+    """Parse label objects from a raw string"""
+
+    board = backlog_board()
+    labels = [_.strip() for _ in labels_raw.split(',')]
+    return [_ for _ in board.get_labels() if _.name in labels]
+
 def arg_add(cli_args):
     """Add a new card to a given list"""
 
@@ -182,10 +189,15 @@ def arg_add(cli_args):
         return
 
     new_due = str(parse_new_due_date(cli_args.due))
+
+    add_labels = None
+    if cli_args.labels:
+        add_labels = parse_labels(cli_args.labels)
     
     destination_list.add_card(
         name=cli_args.card_name,
-        due=new_due if cli_args.due else "null"
+        due=new_due if cli_args.due else "null",
+        labels=add_labels
     )
 
 def main():
