@@ -55,11 +55,52 @@ def parse_new_due_date(due_date):
     if not due_date:
         return
 
+    new_due_date_hour = 17
+    new_due_date_minute = 0
+    new_due_date_second = 0
+    new_due_date_ms = 0
+
     today = datetime.datetime.today()
 
-    regex_match = re.search(r'(\d*)\s*days?', due_date)
+    if due_date == 'today':
+        new_due_date = today.replace(
+            hour=new_due_date_hour,
+            minute=new_due_date_minute,
+            second=new_due_date_second,
+            microsecond=new_due_date_ms
+        )
+        return new_due_date
+
+    if due_date == 'tomorrow':
+        new_due_date = today.replace(
+            day=today.day + 1,
+            hour=new_due_date_hour,
+            minute=new_due_date_minute,
+            second=new_due_date_second,
+            microsecond=new_due_date_ms
+        )
+        return new_due_date
+
+    regex_match = re.search(r'^(\d+)\s*days?$', due_date)
     if regex_match:
-        
+        new_due_date = today + datetime.timedelta(days=int(regex_match.group(1)))
+        new_due_date = new_due_date.replace(
+            hour=new_due_date_hour,
+            minute=new_due_date_minute,
+            second=new_due_date_second,
+            microsecond = new_due_date_ms
+        )
+        return new_due_date
+
+    regex_match = re.search(r'^(\d+)[/-](\d+)$', due_date)
+    if regex_match:
+        new_due_date = datetime.datetime(today.year, int(regex_match.group(1)), int(regex_match.group(2)), new_due_date_hour, new_due_date_minute)
+        return new_due_date
+
+    regex_match = re.search(r'^(\d+)[/-](\d+)[/-](\d+)$', due_date)
+    if regex_match:
+        new_due_date = datetime.datetime(int(regex_match.group(1)), int(regex_match.group(2)), int(regex_match.group(3)), new_due_date_hour, new_due_date_minute)
+        return new_due_date
 
 def arg_list(cli_args):
     """List a board card summary"""
@@ -140,7 +181,7 @@ def arg_add(cli_args):
         print(f'{colorama.Fore.RED}Error searching for list')
         return
 
-    new_due = parse_new_due_date(cli_args.due)
+    new_due = str(parse_new_due_date(cli_args.due))
     
     destination_list.add_card(
         name=cli_args.card_name,
