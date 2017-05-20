@@ -7,6 +7,19 @@ import re
 from trello import TrelloClient
 from exceptions import JerseyError
 
+COLOR_MAPPING = {
+    'green': colorama.Fore.GREEN,
+    'yellow': colorama.Fore.YELLOW,
+    'orange': colorama.Fore.LIGHTRED_EX,
+    'red': colorama.Fore.RED,
+    'purple': colorama.Fore.MAGENTA,
+    'blue': colorama.Fore.BLUE,
+    'sky': colorama.Fore.CYAN,
+    'lime': colorama.Fore.LIGHTGREEN_EX,
+    'pink': colorama.Fore.LIGHTMAGENTA_EX,
+    'black': colorama.Fore.WHITE
+}
+
 def trello_creds():
     return TrelloClient(
         api_key=os.environ['TRELLO_API_KEY'],
@@ -200,6 +213,14 @@ def arg_add(cli_args):
         labels=add_labels
     )
 
+def arg_list_labels(cli_args):
+    """List the current labels on the board"""
+
+    board = backlog_board()
+
+    for label in board.get_labels():
+        print(f'{COLOR_MAPPING[label.color] if label.color else colorama.Fore.WHITE}{label.name}{colorama.Fore.RESET}')
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -231,6 +252,10 @@ def main():
         help='(optional) comma-separated list of labels for the new card'
     )
     add_parser.set_defaults(func=arg_add)
+
+    # list labels
+    label_parser = subparsers.add_parser('labels', help='list labels')
+    label_parser.set_defaults(func=arg_list_labels)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)
