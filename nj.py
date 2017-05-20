@@ -221,6 +221,15 @@ def arg_list_labels(cli_args):
     for label in board.get_labels():
         print(f'{COLOR_MAPPING[label.color] if label.color else colorama.Fore.WHITE}{label.name}{colorama.Fore.RESET}')
 
+def arg_comment(cli_args):
+    """Add a comment to a card"""
+
+    board = backlog_board()
+
+    card = card_by_id(cli_args.card_id, board)
+
+    card.comment(cli_args.comment)
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -256,6 +265,12 @@ def main():
     # list labels
     label_parser = subparsers.add_parser('labels', help='list labels')
     label_parser.set_defaults(func=arg_list_labels)
+
+    # add a comment to a card
+    comment_parser = subparsers.add_parser('comment', help='add a comment to a card')
+    comment_parser.add_argument('card_id', help='card to comment on')
+    comment_parser.add_argument('comment', help='commend to add to card')
+    comment_parser.set_defaults(func=arg_comment)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)
