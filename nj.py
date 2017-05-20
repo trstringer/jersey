@@ -232,6 +232,14 @@ def arg_comment(cli_args):
 
     card.comment(cli_args.comment)
 
+def arg_sort(cli_args):
+    """Sort all cards in board"""
+    board = backlog_board()
+
+    for trello_list in board.list_lists():
+        for card in sorted(trello_list.list_cards(), key=lambda card: card.due):
+            print(f'{card.pos} {card.due}')
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -273,6 +281,10 @@ def main():
     comment_parser.add_argument('card_id', help='card to comment on')
     comment_parser.add_argument('comment', help='commend to add to card')
     comment_parser.set_defaults(func=arg_comment)
+
+    # sort all cards in the board
+    sort_parser = subparsers.add_parser('sort', help='sort all cards in the bard')
+    sort_parser.set_defaults(func=arg_sort)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)
