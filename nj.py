@@ -55,8 +55,10 @@ def format_due_date(card):
         hour = due_datetime.hour if due_datetime.hour <= 12 else due_datetime.hour - 12
         minute = ('0' + str(due_datetime.minute))[-2:]
         am_or_pm = 'am' if due_datetime.hour < 12 else 'pm'
-        if due_datetime.date() <= today.date():
+        if due_datetime.date() == today.date():
             due_output = f'{colorama.Style.BRIGHT}Today {hour}:{minute} {am_or_pm}{colorama.Style.NORMAL}'
+        elif due_datetime.date() < today.date():
+            due_output = f'{colorama.Style.BRIGHT}{colorama.Fore.RED}Past Due{colorama.Style.NORMAL}'
         elif due_datetime.date() == tomorrow.date():
             due_output = f'Tomorrow {hour}:{minute} {am_or_pm}'
         else:
