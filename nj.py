@@ -3,7 +3,9 @@ import colorama
 import datetime
 import dateutil
 import os
+import pytz
 import re
+import time
 from trello import TrelloClient
 from exceptions import JerseyError
 
@@ -237,8 +239,18 @@ def arg_sort(cli_args):
     board = backlog_board()
 
     for trello_list in board.list_lists():
-        for card in sorted(trello_list.list_cards(), key=lambda card: card.due):
-            print(f'{card.pos} {card.due}')
+        cards = trello_list.list_cards()
+        if not cards or trello_list.name == 'done':
+            continue
+        min_pos = min(cards, key=lambda card: card.pos).pos
+        max_pos = max(cards, key=lambda card: card.pos).pos
+        len_cards = len(cards)
+        for idx, card in enumerate(sorted(
+                trello_list.list_cards(),
+                key=lambda card: card.due_date if card.due_date else datetime.datetime.max.replace(tzinfo=pytz.UTC))):
+            target_pos = min_pos + (idx * (max_pos - min_pos) / (len_cards - 1))
+            if card.pos != target_pos:
+                card.set_pos(target_pos)
 
 def main():
     parser = argparse.ArgumentParser()
