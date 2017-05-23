@@ -303,32 +303,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# list all non-done lists ::  $ nj
-#   - order (doing, blocked, need_to_do)
-# list particular list ::     $ nj list <list_name>
-# show info about card ::     $ nj show <card_id>
-# move card ::                $ nj move <card_id> <list_name>
-# add card ::                 $ nj add 'card name' <list_name> -d <due_date> -l <labels>
-#   - due_date can be 'today', 'tomorrow', '4 days', 'next wednesday', '5/31', '2017/5/31'
-#   - due_date is optional
-#   - labels is a comma-delimited list of existing labels
-# list labels ::              $ nj labels
-# sort all cards ::           $ nj sort
-#   - sorts all cards by date in all lists
-#   - cards with no dates appear last on the respective list
-# add comment to card:        $ nj comment <card_id> <comment>
-
-# label -> colorama mapping
-# ========================= 
-# green -> GREEN
-# yellow -> YELLOW
-# orange -> LIGHTRED_EX
-# red -> RED
-# purple -> MAGENTA
-# blue -> BLUE
-# sky -> CYAN
-# lime -> LIGHTGREEN_EX
-# pink -> LIGHTMAGENTA_EX
-# black -> None
-# None -> None
