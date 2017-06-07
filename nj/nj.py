@@ -1,8 +1,8 @@
 """Main module for Jersey CLI"""
 import argparse
-from .card import arg_comment, arg_move, arg_show, arg_add
-from .label import arg_list_labels
-from .worklist import arg_list, arg_sort
+from card import arg_comment, arg_move, arg_show, arg_add
+from label import arg_list_labels
+from worklist import arg_list, arg_sort
 
 def main():
     """Main module execution function"""

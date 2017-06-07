@@ -2,7 +2,7 @@
 import datetime
 import pytz
 import colorama
-from .trelloutil import backlog_board, format_due_date
+from trelloutil import backlog_board, format_due_date
 
 def arg_list(cli_args):
     """List a board card summary"""

@@ -1,7 +1,7 @@
 """Handle Trello labels"""
 import colorama
-from .colormapping import COLOR_MAPPING
-from .trelloutil import backlog_board
+from colormapping import COLOR_MAPPING
+from trelloutil import backlog_board
 
 def parse_labels(labels_raw):
     """Parse label objects from a raw string"""

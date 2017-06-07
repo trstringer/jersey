@@ -1,8 +1,8 @@
 """Card functionality"""
 import dateutil
 import colorama
-from .label import parse_labels
-from .trelloutil import format_due_date, backlog_board, parse_new_due_date
+from label import parse_labels
+from trelloutil import format_due_date, backlog_board, parse_new_due_date
 
 def card_by_id(card_id_postfix, board):
     """Retrieve a card by the last 3 digits of its id"""

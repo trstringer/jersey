@@ -20,7 +20,7 @@ install: dev
 
 	@echo -e '#!/bin/bash\n' > ${INSTALL_DIR}/${BIN_NAME}
 	@echo '. ${CWD}/venv/bin/activate' >> ${INSTALL_DIR}/${BIN_NAME}
-	@echo 'python -m ${CWD}/nj "$$@"' >> ${INSTALL_DIR}/${BIN_NAME}
+	@echo 'python ${CWD}/nj/nj.py "$$@"' >> ${INSTALL_DIR}/${BIN_NAME}
 	@chmod 755 ${INSTALL_DIR}/${BIN_NAME}
 	@echo ... installation complete ...
 
