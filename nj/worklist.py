@@ -32,6 +32,11 @@ def arg_sort(cli_args):
         min_pos = min(cards, key=lambda card: card.pos).pos
         max_pos = max(cards, key=lambda card: card.pos).pos
         len_cards = len(cards)
+
+        # no need to sort if there are no cards, or only 1
+        if len_cards <= 1:
+            return
+
         # pylint: disable=line-too-long
         for idx, card in enumerate(sorted(
                 trello_list.list_cards(),
