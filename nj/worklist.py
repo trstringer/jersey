@@ -23,26 +23,33 @@ def arg_list(cli_args):
         # pylint: disable=line-too-long
         print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output} {label_output}')
 
+def sort_list(trello_list):
+    """Sort the cards in a list"""
+    cards = trello_list.list_cards()
+
+    if not cards:
+        return
+
+    min_pos = min(cards, key=lambda card: card.pos).pos
+    max_pos = max(cards, key=lambda card: card.pos).pos
+    len_cards = len(cards)
+
+    # no need to sort if there are no cards, or only 1
+    if len_cards <= 1:
+        return
+
+    # pylint: disable=line-too-long
+    for idx, card in enumerate(sorted(
+            trello_list.list_cards(),
+            key=lambda card: card.due_date if card.due_date else datetime.datetime.max.replace(tzinfo=pytz.UTC))):
+        target_pos = min_pos + (idx * (max_pos - min_pos) / (len_cards - 1))
+        if card.pos != target_pos:
+            card.set_pos(target_pos)
+
 def arg_sort(cli_args):
     """Sort all cards in board"""
     board = backlog_board()
 
     for trello_list in board.list_lists():
-        cards = trello_list.list_cards()
-        if not cards or trello_list.name == 'done':
-            continue
-        min_pos = min(cards, key=lambda card: card.pos).pos
-        max_pos = max(cards, key=lambda card: card.pos).pos
-        len_cards = len(cards)
-
-        # no need to sort if there are no cards, or only 1
-        if len_cards <= 1:
-            return
-
-        # pylint: disable=line-too-long
-        for idx, card in enumerate(sorted(
-                trello_list.list_cards(),
-                key=lambda card: card.due_date if card.due_date else datetime.datetime.max.replace(tzinfo=pytz.UTC))):
-            target_pos = min_pos + (idx * (max_pos - min_pos) / (len_cards - 1))
-            if card.pos != target_pos:
-                card.set_pos(target_pos)
+        if trello_list.name != 'done':
+            sort_list(trello_list)

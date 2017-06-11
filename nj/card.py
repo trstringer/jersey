@@ -3,6 +3,7 @@ import dateutil
 import colorama
 from label import parse_labels
 from trelloutil import format_due_date, backlog_board, parse_new_due_date
+from worklist import sort_list
 
 def card_by_id(card_id_postfix, board):
     """Retrieve a card by the last 3 digits of its id"""
@@ -89,3 +90,5 @@ def arg_add(cli_args):
         due=new_due if cli_args.due else "null",
         labels=add_labels
     )
+
+    sort_list(destination_list)
