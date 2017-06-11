@@ -2,7 +2,7 @@
 
 A command line interface (CLI) to-do/backlog tool to stay organized. This uses Trello as a backend with an opinionated workflow.
 
-*Insert gif here*
+![jersey demo](./demo.gif)
 
 # Install
 
