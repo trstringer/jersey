@@ -1,4 +1,6 @@
-# Jersey - where you go when you need to get things done
+# Jersey
+
+*Where you go when you need to get things done*
 
 A command line interface (CLI) to-do/backlog tool to stay organized. This uses Trello as a backend with an opinionated workflow.
 
