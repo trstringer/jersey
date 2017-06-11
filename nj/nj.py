@@ -1,5 +1,6 @@
 """Main module for Jersey CLI"""
 import argparse
+import sys
 from card import arg_comment, arg_move, arg_show, arg_add
 from label import arg_list_labels
 from worklist import arg_list, arg_sort
@@ -53,6 +54,10 @@ def main():
     # sort all cards in the board
     sort_parser = subparsers.add_parser('sort', help='sort all cards in the bard')
     sort_parser.set_defaults(func=arg_sort)
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)
