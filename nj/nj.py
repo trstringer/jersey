@@ -3,7 +3,7 @@ import argparse
 import sys
 from card import arg_comment, arg_move, arg_show, arg_add
 from label import arg_list_labels
-from worklist import arg_list, arg_sort
+from worklist import arg_list, arg_sort, display_active_lists
 
 def main():
     """Main module execution function"""
@@ -55,9 +55,11 @@ def main():
     sort_parser = subparsers.add_parser('sort', help='sort all cards in the bard')
     sort_parser.set_defaults(func=arg_sort)
 
+    # if the user calls nj with no args then show
+    # all active lists
     if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
+        display_active_lists()
+        sys.exit(0)
 
     cli_args = parser.parse_args()
     cli_args.func(cli_args)

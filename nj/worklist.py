@@ -5,13 +5,22 @@ import colorama
 from trelloutil import backlog_board, format_due_date
 from label import label_name_with_color
 
-def arg_list(cli_args):
-    """List a board card summary"""
+def display_active_lists():
+    """Display all active lists"""
 
+    active_lists = ['doing', 'blocked', 'need_to_do']
+
+    for active_list in active_lists:
+        print(f'{colorama.Style.BRIGHT}{colorama.Fore.YELLOW}{active_list}')
+        print(f'{colorama.Fore.RED}{"-" * len(active_list)}{colorama.Style.NORMAL}')
+        display_list(active_list)
+        print()
+
+def display_list(list_name):
     board = backlog_board()
 
     lists = board.list_lists()
-    input_list = [_ for _ in lists if _.name == cli_args.list_name][0]
+    input_list = [_ for _ in lists if _.name == list_name][0]
 
     for card in sorted(
             input_list.list_cards(),
@@ -22,6 +31,11 @@ def arg_list(cli_args):
         label_output = ' '.join([label_name_with_color(card_label) for card_label in card.labels])
         # pylint: disable=line-too-long
         print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output} {label_output}')
+
+def arg_list(cli_args):
+    """List a board card summary"""
+
+    display_list(cli_args.list_name)
 
 def sort_list(trello_list):
     """Sort the cards in a list"""
