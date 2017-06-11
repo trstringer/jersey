@@ -7,7 +7,9 @@ from worklist import arg_list, arg_sort
 def main():
     """Main module execution function"""
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        prog='nj'
+    )
     subparsers = parser.add_subparsers()
 
     # list a list of card summaries
