@@ -3,6 +3,7 @@ import datetime
 import pytz
 import colorama
 from trelloutil import backlog_board, format_due_date
+from label import label_name_with_color
 
 def arg_list(cli_args):
     """List a board card summary"""
@@ -18,8 +19,9 @@ def arg_list(cli_args):
         due_output = format_due_date(card)
         comments_count = len(card.get_comments())
         comments_output = f' {colorama.Fore.GREEN}({comments_count})' if comments_count > 0 else ''
+        label_output = ' '.join([label_name_with_color(card_label) for card_label in card.labels])
         # pylint: disable=line-too-long
-        print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output}')
+        print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output} {label_output}')
 
 def arg_sort(cli_args):
     """Sort all cards in board"""

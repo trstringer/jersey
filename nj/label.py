@@ -10,6 +10,8 @@ def parse_labels(labels_raw):
     labels = [_.strip() for _ in labels_raw.split(',')]
     return [_ for _ in board.get_labels() if _.name in labels]
 
+def label_name_with_color(label):
+    return f'{COLOR_MAPPING[label.color] if label.color else colorama.Fore.WHITE}{label.name}{colorama.Fore.RESET}'
 
 def arg_list_labels(cli_args):
     """List the current labels on the board"""
@@ -18,4 +20,4 @@ def arg_list_labels(cli_args):
 
     for label in board.get_labels():
         # pylint: disable=line-too-long
-        print(f'{COLOR_MAPPING[label.color] if label.color else colorama.Fore.WHITE}{label.name}{colorama.Fore.RESET}')
+        print(label_name_with_color(label))
