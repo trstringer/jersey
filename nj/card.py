@@ -2,15 +2,15 @@
 import dateutil
 import colorama
 from label import parse_labels
-from trelloutil import format_due_date, backlog_board, parse_new_due_date
+from trelloutil import format_due_date, backlog_board, parse_new_due_date, CARD_ID_POSTFIX_COUNT
 from worklist import sort_list
 
 def card_by_id(card_id_postfix, board):
-    """Retrieve a card by the last 3 digits of its id"""
+    """Retrieve a card by the last few digits of its id"""
 
     found_cards = [
         _ for _ in board.get_cards()
-        if _.id[-3:] == card_id_postfix
+        if _.id[-CARD_ID_POSTFIX_COUNT:] == card_id_postfix
     ]
 
     if not found_cards:

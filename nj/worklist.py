@@ -2,7 +2,7 @@
 import datetime
 import pytz
 import colorama
-from trelloutil import backlog_board, format_due_date
+from trelloutil import backlog_board, format_due_date, CARD_ID_POSTFIX_COUNT
 from label import label_name_with_color
 
 def display_active_lists():
@@ -30,7 +30,7 @@ def display_list(list_name):
         comments_output = f' {colorama.Fore.GREEN}({comments_count})' if comments_count > 0 else ''
         label_output = ' '.join([label_name_with_color(card_label) for card_label in card.labels])
         # pylint: disable=line-too-long
-        print(f'{colorama.Fore.YELLOW}{card.id[-3:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output} {label_output}')
+        print(f'{colorama.Fore.YELLOW}{card.id[-CARD_ID_POSTFIX_COUNT:]} {due_output} {colorama.Fore.RESET}{card.name}{comments_output} {label_output}')
 
 def arg_list(cli_args):
     """List a board card summary"""

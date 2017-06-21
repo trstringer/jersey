@@ -7,6 +7,8 @@ import colorama
 # pylint: disable=no-name-in-module
 from trello import TrelloClient
 
+CARD_ID_POSTFIX_COUNT = 4
+
 def trello_creds():
     """Wrapper function to retrieve trello credentials"""
     return TrelloClient(
