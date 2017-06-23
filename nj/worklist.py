@@ -12,7 +12,7 @@ def display_active_lists():
 
     for active_list in active_lists:
         print(f'{colorama.Style.BRIGHT}{colorama.Fore.YELLOW}{active_list}')
-        print(f'{colorama.Fore.RED}{"-" * len(active_list)}{colorama.Style.NORMAL}')
+        print(f'{colorama.Fore.RED}{"-" * len(active_list)}{colorama.Style.NORMAL}{colorama.Fore.RESET}')
         display_list(active_list)
         print()
 

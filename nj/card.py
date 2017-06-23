@@ -32,7 +32,7 @@ def arg_show(cli_args):
         return
 
     print(f'{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}{card.name}{colorama.Fore.RESET}')
-    print(f'Due: {format_due_date(card)}{colorama.Fore.RESET}')
+    print(f'Due: {format_due_date(card)}{colorama.Fore.RESET}{colorama.Style.NORMAL}')
 
     for comment in sorted(card.get_comments(), key=lambda c: c['date'], reverse=True):
         comment_datetime = str(dateutil.parser.parse(comment['date']))
