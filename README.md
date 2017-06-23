@@ -44,7 +44,7 @@ positional arguments:
     add                 add a new card
     labels              list labels
     comment             add a comment to a card
-    sort                sort all cards in the bard
+    sort                sort all cards in the board
 
 optional arguments:
   -h, --help            show this help message and exit

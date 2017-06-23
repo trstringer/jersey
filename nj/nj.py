@@ -52,7 +52,7 @@ def main():
     comment_parser.set_defaults(func=arg_comment)
 
     # sort all cards in the board
-    sort_parser = subparsers.add_parser('sort', help='sort all cards in the bard')
+    sort_parser = subparsers.add_parser('sort', help='sort all cards in the board')
     sort_parser.set_defaults(func=arg_sort)
 
     # if the user calls nj with no args then show
