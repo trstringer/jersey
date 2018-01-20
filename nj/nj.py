@@ -1,7 +1,7 @@
 """Main module for Jersey CLI"""
 import argparse
 import sys
-from card import arg_comment, arg_move, arg_show, arg_add
+from card import arg_comment, arg_move, arg_show, arg_add, arg_modify
 from label import arg_list_labels
 from worklist import arg_list, arg_sort, display_active_lists
 
@@ -50,6 +50,30 @@ def main():
     comment_parser.add_argument('card_id', help='card to comment on')
     comment_parser.add_argument('comment', help='commend to add to card')
     comment_parser.set_defaults(func=arg_comment)
+
+    # modify an existing card
+    modify_parser = subparsers.add_parser('modify', help='modify an existing card')
+    modify_parser.add_argument('card_id', help='card to modify')
+    modify_parser.add_argument(
+        '-l',
+        '--label',
+        help='(optional) the label to add to the card'
+    )
+    modify_parser.add_argument(
+        '-d',
+        '--due',
+        help='(optional) the due date to change'
+    )
+    modify_parser.add_argument(
+        '--remove-due',
+        action='store_true',
+        help='(optional) remove the due date for the card'
+    )
+    modify_parser.add_argument(
+        '--remove-label',
+        help='(optional) remove the label from the card'
+    )
+    modify_parser.set_defaults(func=arg_modify)
 
     # sort all cards in the board
     sort_parser = subparsers.add_parser('sort', help='sort all cards in the board')

@@ -1,5 +1,6 @@
 """Card functionality"""
 import dateutil
+from datetime import datetime
 import colorama
 from label import parse_labels
 from trelloutil import format_due_date, backlog_board, parse_new_due_date, CARD_ID_POSTFIX_COUNT
@@ -66,6 +67,32 @@ def arg_comment(cli_args):
     card = card_by_id(cli_args.card_id, board)
 
     card.comment(cli_args.comment)
+
+def arg_modify(cli_args):
+    """Modify an existing card"""
+
+    board = backlog_board()
+
+    card = card_by_id(cli_args.card_id, board)
+
+    if cli_args.remove_due:
+        card.remove_due()
+
+    if cli_args.remove_label:
+        label_to_remove = [_ for _ in card.labels if _.name == cli_args.remove_label]
+        if label_to_remove:
+            card.remove_label(label_to_remove[0])
+
+    if cli_args.label:
+        add_labels = parse_labels(cli_args.label)
+        if add_labels:
+            card.add_label(add_labels[0])
+
+    if cli_args.due:
+        new_due = str(parse_new_due_date(cli_args.due))
+        # set_due() expects the due date in a datetime object
+        new_due = datetime.strptime(new_due, '%Y-%m-%d %H:%M:%S')
+        card.set_due(new_due)
 
 def arg_add(cli_args):
     """Add a new card to a given list"""
