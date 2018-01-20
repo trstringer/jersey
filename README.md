@@ -34,16 +34,18 @@ Jersey not only uses Trello as a backend, but also the awesome [py-trello](https
 # Usage
 
 ```
-usage: nj [-h] {list,show,move,add,labels,comment,sort} ...
+usage: nj [-h] {ls,list,show,move,add,labels,comment,modify,sort} ...
 
 positional arguments:
-  {list,show,move,add,labels,comment,sort}
+  {ls,list,show,move,add,labels,comment,modify,sort}
+    ls                  list all cards with a label filter
     list                list things
     show                display a card and contents
     move                move a card to a different list
     add                 add a new card
     labels              list labels
     comment             add a comment to a card
+    modify              modify an existing card
     sort                sort all cards in the board
 
 optional arguments:
@@ -58,6 +60,12 @@ Show all active lists (need_to_do, doing, and blocked)
 
 ```
 $ nj
+```
+
+Show all cards with a particular label
+
+```
+$ nj ls work
 ```
 
 Show a particular list: `nj list <list_name>`
@@ -85,6 +93,30 @@ $ nj add 'review pull request' doing -d today -l work
 $ nj add 'review pull request' doing -d today
 $ nj add 'review pull request' doing -l work
 $ nj add 'review pull request' doing
+```
+
+Modify an existing card's due date
+
+```
+$ nj modify <card_id> -d tomorrow
+```
+
+Remove an existing card's due date
+
+```
+$ nj modify <card_id> --remove-due
+```
+
+Add a label to an existing card
+
+```
+$ nj modify <card_id> -l <label_name>
+```
+
+Remove a label from an existing card
+
+```
+$ nj modify <card_id> --remove-label <label_name>
 ```
 
 Add a comment to a card: `nj comment <card_id> <comment>`
