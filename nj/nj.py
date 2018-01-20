@@ -3,7 +3,7 @@ import argparse
 import sys
 from card import arg_comment, arg_move, arg_show, arg_add, arg_modify
 from label import arg_list_labels
-from worklist import arg_list, arg_sort, display_active_lists
+from worklist import arg_list, arg_sort, display_active_lists, arg_list_cards_by_label
 
 def main():
     """Main module execution function"""
@@ -12,6 +12,11 @@ def main():
         prog='nj'
     )
     subparsers = parser.add_subparsers()
+
+    # list all cards by label
+    ls_parser = subparsers.add_parser('ls', help='list all cards with a label filter')
+    ls_parser.add_argument('label', help='label filter to list cards for')
+    ls_parser.set_defaults(func=arg_list_cards_by_label)
 
     # list a list of card summaries
     list_parser = subparsers.add_parser('list', help='list things')
