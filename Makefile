@@ -1,7 +1,7 @@
 PYTHON3_VERSION = $(shell python3 -c "import sys; print(sys.version_info.minor)")
 PYTHON3_PATH = $(shell which python3)
 MIN_PYTHON3_MINOR_REQUIRED = 6
-PYTHON36_PATH = $(shell which python36)
+PYTHON36_PATH = $(shell which python3.6)
 PYTHON3_BIN=$(shell if [ ${PYTHON3_VERSION} -ge ${MIN_PYTHON3_MINOR_REQUIRED} ] ; then \
 	echo ${PYTHON3_PATH}; \
 else \
